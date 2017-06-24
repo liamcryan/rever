@@ -28,22 +28,26 @@ the decorator will retry the function 1 time, with a 1 second pause, and catch a
 
 times
     Retry a certain number of times
+
     >>> @rever(times=10)
 
 pause
     Pause for some number of seconds
+
     >>> @rever(pause=5)
 
 exception
-    Catching one exception:
+    Catching one exception
+
     >>> @rever(exception=TypeError)
     >>> @rever(exception=(TypeError, ))
 
     Catching multiple exceptions:
+
     >>> @rever(exception=(TypeError, ConnectionError))
 
 
-Putting it all together:
+Putting it all together
     >>> @rever(times=5, pause=2, exception=(ConnectionError,))
 
 
