@@ -14,6 +14,7 @@ the first time, and if you are scraping many sites, your program could bug out. 
 If any of the calls to get_website fail, then you are doomed.
 
 >>> import requests  # if you are using requests...
+>>> from rever import rever
 >>> @rever()
 >>> def get_website_bad_connection(website):
 >>>     return requests.get(website)
