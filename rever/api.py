@@ -1,6 +1,8 @@
 from functools import wraps
 import time
 
+from rever import ReachedMaxRetries
+
 
 def rever(**rever_kwargs):
     if "times" not in rever_kwargs:
@@ -21,11 +23,10 @@ def rever(**rever_kwargs):
             except rever_kwargs["exception"]:
                 time.sleep(rever_kwargs["pause"])
                 rever_kwargs["times"] -= 1
-                print("rever is about to retry this function: {}".format(func),
-                      "\n",
-                      "After this attempt, there will be {} more attempts".format(rever_kwargs["times"]))
                 if rever_kwargs["times"] > 0:
                     return wrapper(*args, **kwargs)
+                else:
+                    raise ReachedMaxRetries(func)
 
         return wrapper
     return rever_decorator
