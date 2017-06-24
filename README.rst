@@ -11,7 +11,7 @@ the first time, and if you are scraping many sites, your program could bug out. 
 >>> urls = [url1, url2, url3, ...., url9999]
 >>> responses = [get_website(url) for url in urls]
 
-If any of the calls to get_website fail, then you are doomed.
+If any of the calls to get_website fail, then you can't really get all your responses...
 
 >>> import requests  # if you are using requests...
 >>> from rever import rever
