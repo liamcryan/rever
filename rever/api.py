@@ -1,7 +1,7 @@
 from functools import wraps
 import time
 
-from rever import ReachedMaxRetries
+from rever.errors import ReachedMaxRetries
 
 
 def rever(**rever_kwargs):

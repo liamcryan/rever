@@ -1,7 +1,7 @@
 import pytest
 
-from rever import ReachedMaxRetries
 from rever import rever
+from rever.errors import ReachedMaxRetries
 
 
 class TestRever:
@@ -34,3 +34,21 @@ class TestRever:
         def f():
             raise OSError
         assert f() is None
+
+    def test_function_args_kwargs(self):
+        with pytest.raises(ReachedMaxRetries):
+            @rever()
+            def f(*args, **kwargs):
+                if args or kwargs:
+                    raise OSError
+            f(1, 2, fruit="apple")
+
+    def test_function_args_kwargs_two_retys(self):
+        with pytest.raises(ReachedMaxRetries):
+            @rever(times=2)
+            def f(*args, **kwargs):
+                if args or kwargs:
+                    raise OSError
+
+            f(1, 2, fruit="apple")
+
