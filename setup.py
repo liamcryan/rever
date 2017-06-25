@@ -26,5 +26,5 @@ setup(name=about["__title__"],
       packages=[about["__title__"]],
       classifiers=["Development Status :: 2 - Pre-Alpha",
                    "Programming Language :: Python 3",
-                   "Programming Language :: Python 3.6"]
+                   "Programming Language :: Python 3.5"]
       )
