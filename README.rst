@@ -2,29 +2,49 @@
 Rever, A retrying decorator
 ---------------------------
 
-Explanation
+Why use it?
 -----------
 
-A retry decorator can be useful when you are scraping web pages.  A GET request is not always successful
-the first time, and if you are scraping many sites, your program could bug out.  For example:
+A retry decorator can be useful in many situations.  One example is when scraping web pages.
+Suppose you have a function that retrieves the status code response of a GET request.  If the status
+code returns 200, then you are happy.  But if not, then there here is what you might do:
 
->>> urls = [url1, url2, url3, ...., url9999]
->>> responses = [get_website(url) for url in urls]
+1)  You could write your retrying logic directly into your functions
 
-If any of the calls to get_website fail, then you can't really get all your responses...
+    >>> num_tries = 2
+    >>>
+    >>> def get_response(webpage):
+    >>>     response = function_to_get_webpage(webpage)
+    >>>     status_code = function_to_get_status_code(response)
+    >>>     if status_code == 200:
+    >>>         return status_code
+    >>>     else:
+    >>>         time.sleep(3)
+    >>>         num_tries -= 1
+    >>>         if num_tries > 0:
+    >>>             return get_response(webpage)
 
->>> import requests  # if you are using requests...
->>> from rever import rever
->>> @rever()
->>> def get_website_bad_connection(website):
->>>     return requests.get(website)
+2)  You could use a retrying decorator like rever
 
+    >>> @rever(times=2, pause=3, exception=MyException, raises=False)
+    >>> def get_response(webpage):
+    >>>     response = function_to_get_webpage(webpage)
+    >>>     status_code = function_to_get_status_code(response)
+    >>>     if status_code == 200:
+    >>>         return status_code
+    >>>     else:
+    >>>         raise MyException
+
+
+In the first example, you need to write out the retrying logic yourself.  The second
+example it is taken care of in the decorator; a nice way of keeping things separate.
 
 Keyword Arguments
 -----------------
 
 The rever decorator takes only keyword arguments.  By default, if no kwargs are supplied, then
-the decorator will retry the function 1 time, with a 1 second pause, and catch any exception that occurs.
+the decorator will retry the function 1 time, with a 1 second pause, catch any exception that occurs,
+and will raise a MaxRetriesPerformed error if all of the retrys fail.
 
 
 times
@@ -32,31 +52,46 @@ times
 
     >>> @rever(times=10)
 
+    *Explanation: retry 10 times, pauses for 1 second between each retry,
+    catch any exception, raise MaxRetriesPerformed if all attempts fail*
+
 pause
-    Pause for some number of seconds
+    Pause for some number of seconds between each retry
 
     >>> @rever(pause=5)
 
+    *Explanation: retry 1 time, pauses for 5 seconds between each retry,
+    catch any exception, raise MaxRetriesPerformed if all attempts fail*
+
+
 exception
-    Catching one exception
+    Catch one specific exception
 
     >>> @rever(exception=TypeError)
     >>> @rever(exception=(TypeError, ))
 
-    Catching multiple exceptions:
+    *Explanation: retry 1 time, pauses for 1 second between each retry,
+    catch TypeError, raise MaxRetriesPerformed if all attempts fail*
+
+    Catch one of multiple specific exceptions
 
     >>> @rever(exception=(TypeError, ConnectionError))
 
+    *Explanation: retry 1 time, pauses for 1 second between each retry,
+    catch TypeError or ConnectionError, raise MaxRetriesPerformed if all attempts fail*
 
-Putting it all together
-    >>> @rever(times=5, pause=2, exception=(ConnectionError,))
+raises
+    Raise an exception or do not
+
+    >>> @rever(raises=False)
+
+    *Explanation: retry 1 time, pauses for 1 second between each retry,
+    catch any exception, do not raise MaxRetriesPerformed if all attempts fail*
 
 
 Installation
 ------------
 
-This is a very small amount of code and you can copy and paste the decorator into your project.
-
-If you want to install it via pip, this might work:
+If you want to install it via pip, try this:
 
 >>> pip install git+git://github.com/limecrayon/rever

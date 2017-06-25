@@ -1,2 +1,2 @@
-from .api import rever
 from .errors import ReachedMaxRetries
+from .api import rever

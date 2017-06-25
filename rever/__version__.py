@@ -1,7 +1,7 @@
 __title__ = "rever"
 __author__ = "Liam Cryan"
 __author_email__ = "cryan.liam@gmail.com"
-__version__ = "0.0.1"
+__version__ = "0.1.0"
 __description__ = "Rever, a retrying decorator"
 __license__ = "MIT"
 __url__ = "http://github.com/limecrayon/rever"

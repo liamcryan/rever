@@ -11,6 +11,8 @@ def rever(**rever_kwargs):
         rever_kwargs["pause"] = 1
     if "exception" not in rever_kwargs:
         rever_kwargs["exception"] = BaseException
+    if "raises" not in rever_kwargs:
+        rever_kwargs["raises"] = True
 
     def rever_decorator(func):
         @wraps(func)
@@ -25,8 +27,10 @@ def rever(**rever_kwargs):
                 rever_kwargs["times"] -= 1
                 if rever_kwargs["times"] > 0:
                     return wrapper(*args, **kwargs)
-                else:
+                elif rever_kwargs["raises"]:
                     raise ReachedMaxRetries(func)
+                else:
+                    return None
 
         return wrapper
     return rever_decorator
