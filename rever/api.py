@@ -8,7 +8,7 @@ def rever(**rever_kwargs):
     if "times" not in rever_kwargs:
         rever_kwargs["times"] = 1
     if "pause" not in rever_kwargs:
-        rever_kwargs["pause"] = 1
+        rever_kwargs["pause"] = 0
     if "exception" not in rever_kwargs:
         rever_kwargs["exception"] = BaseException
     if "raises" not in rever_kwargs:

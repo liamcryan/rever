@@ -43,7 +43,7 @@ Keyword Arguments
 -----------------
 
 The rever decorator takes only keyword arguments.  By default, if no kwargs are supplied, then
-the decorator will retry the function 1 time, with a 1 second pause, catch any exception that occurs,
+the decorator will retry the function 1 time, with a 0 second pause, catch any exception that occurs,
 and will raise a MaxRetriesPerformed error if all of the retrys fail.
 
 
@@ -52,7 +52,7 @@ times
 
     >>> @rever(times=10)
 
-    *Explanation: retry 10 times, pauses for 1 second between each retry,
+    *Explanation: retry 10 times, pauses for 0 seconds between each retry,
     catch any exception, raise MaxRetriesPerformed if all attempts fail*
 
 pause
@@ -70,14 +70,14 @@ exception
     >>> @rever(exception=TypeError)
     >>> @rever(exception=(TypeError, ))
 
-    *Explanation: retry 1 time, pauses for 1 second between each retry,
+    *Explanation: retry 1 time, pauses for 0 seconds between each retry,
     catch TypeError, raise MaxRetriesPerformed if all attempts fail*
 
     Catch one of multiple specific exceptions
 
     >>> @rever(exception=(TypeError, ConnectionError))
 
-    *Explanation: retry 1 time, pauses for 1 second between each retry,
+    *Explanation: retry 1 time, pauses for 0 seconds between each retry,
     catch TypeError or ConnectionError, raise MaxRetriesPerformed if all attempts fail*
 
 raises
@@ -85,7 +85,7 @@ raises
 
     >>> @rever(raises=False)
 
-    *Explanation: retry 1 time, pauses for 1 second between each retry,
+    *Explanation: retry 1 time, pauses for 0 seconds between each retry,
     catch any exception, do not raise MaxRetriesPerformed if all attempts fail*
 
 
