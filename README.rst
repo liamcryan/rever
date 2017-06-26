@@ -2,6 +2,7 @@
 Rever, A retrying decorator
 ---------------------------
 
+
 Why use it?
 -----------
 
@@ -43,6 +44,7 @@ code returns 200, then you are happy.  But if not, then there here is what you m
 
 In the first example, you need to write out the retrying logic yourself.  The second
 example it is taken care of in the decorator; a nice way of keeping things separate.
+
 
 Keyword Arguments
 -----------------
