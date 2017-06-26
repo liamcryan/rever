@@ -11,8 +11,6 @@ code returns 200, then you are happy.  But if not, then there here is what you m
 
 1)  You could write your retrying logic directly into your functions
 
-    >>> num_tries = 2
-    >>>
     >>> def get_response(webpage):
     >>>     response = function_to_get_webpage(webpage)
     >>>     status_code = function_to_get_status_code(response)
@@ -23,6 +21,10 @@ code returns 200, then you are happy.  But if not, then there here is what you m
     >>>         num_tries -= 1
     >>>         if num_tries > 0:
     >>>             return get_response(webpage)
+    >>>
+    >>> if __name__ == "__main__":
+    >>>     num_tries = 2
+    >>>     get_response("http://www.google.com")
 
 2)  You could use a retrying decorator like rever
 
@@ -34,6 +36,9 @@ code returns 200, then you are happy.  But if not, then there here is what you m
     >>>         return status_code
     >>>     else:
     >>>         raise MyException
+    >>>
+    >>> if __name__ == "__main__":
+    >>>     get_response("http://www.google.com")
 
 
 In the first example, you need to write out the retrying logic yourself.  The second
@@ -112,6 +117,4 @@ Next Steps
 
     >>> @rever(prior=reset_switch)
     >>> def enjoy_lightbulb(args, kwargs):
-    >>>     some_activity()
-
-2)  Make available on pypi
+    >>>     some_activity(args, kwargs)
