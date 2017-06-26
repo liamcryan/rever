@@ -3,3 +3,4 @@
 .coverage
 .tox
 rever.egg-info
+dist
