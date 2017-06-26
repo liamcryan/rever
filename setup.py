@@ -24,7 +24,7 @@ setup(name=about["__title__"],
       author=about["__author__"],
       author_email=about["__author_email__"],
       packages=[about["__title__"]],
-      keywords="retry, decorator, rever",
+      keywords="retry decorator rever",
       classifiers=["Development Status :: 2 - Pre-Alpha",
                    "Programming Language :: Python 3",
                    "Programming Language :: Python 3.5"]
