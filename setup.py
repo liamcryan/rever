@@ -26,6 +26,7 @@ setup(name=about["__title__"],
       packages=[about["__title__"]],
       keywords="retry decorator rever",
       classifiers=["Development Status :: 2 - Pre-Alpha",
+                   "Intended Audience :: Developers",
                    "Programming Language :: Python 3",
                    "Programming Language :: Python 3.5"]
       )
