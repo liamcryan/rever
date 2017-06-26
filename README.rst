@@ -92,9 +92,14 @@ raises
 Installation
 ------------
 
-If you want to install it via pip, try this:
+If you want to install it via pip, try this in the terminal:
 
->>> pip install git+git://github.com/limecrayon/rever
+    pip install rever
+
+Or this:
+
+    pip install git+git://github.com/limecrayon/rever
+
 
 Next Steps
 ----------
