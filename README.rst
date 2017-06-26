@@ -95,3 +95,18 @@ Installation
 If you want to install it via pip, try this:
 
 >>> pip install git+git://github.com/limecrayon/rever
+
+Next Steps
+----------
+
+1)  Create a keyword argument to rever which will enable you to call a function prior to retrying.
+
+    >>> def reset_switch():
+    >>>     function_to_deactivate_switch()
+    >>>     function_to_reactivate_switch()
+
+    >>> @rever(prior=reset_switch)
+    >>> def enjoy_lightbulb(args, kwargs):
+    >>>     some_activity()
+
+2)  Make available on pypi

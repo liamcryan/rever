@@ -1,18 +1,17 @@
 import os
 from setuptools import setup
-
-#  a lot of this borrowed from requests structuring
+from codecs import open
 
 here = os.path.abspath(os.path.dirname(__file__))
 
 about = {}
-with open(os.path.join(here, "rever", '__version__.py'), 'r') as f:
+with open(os.path.join(here, "rever", '__version__.py'), 'r', 'utf-8') as f:
     exec(f.read(), about)
 
-with open('README.rst', 'r') as f:
+with open('README.rst', 'r', 'utf-8') as f:
     readme = f.read()
 
-with open('HISTORY.rst', 'r') as f:
+with open('HISTORY.rst', 'r', 'utf-8') as f:
     history = f.read()
 
 setup(name=about["__title__"],
