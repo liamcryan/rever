@@ -128,11 +128,13 @@ To run tests, clone the github repository:
 If you want to use tox, in the terminal type:
 
     $ pip install tox
+
     $ tox
 
 Or you could skip tox and use pytest:
 
     $ pip install pytest
+
     $ python -m pytest
 
 
