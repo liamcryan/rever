@@ -51,7 +51,7 @@ Keyword Arguments
 
 The rever decorator takes only keyword arguments.  By default, if no kwargs are supplied, then
 the decorator will retry the function 1 time, with a 0 second pause, catch any exception that occurs,
-and will raise a MaxRetriesPerformed error if all of the retrys fail.
+raise a MaxRetriesPerformed error if all of the retrys fail, and will not call any function prior to retrying.
 
 
 times
