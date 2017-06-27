@@ -59,16 +59,18 @@ times
 
     >>> @rever(times=10)
 
-    *Explanation: retry 10 times, pauses for 0 seconds between each retry,
-    catch any exception, raise MaxRetriesPerformed if all attempts fail*
+    *Explanation: retry 10 times, pause for 0 seconds between each retry,
+    catch any exception, raise MaxRetriesPerformed if all attempts fail,
+    do not call any function prior to retrying*
 
 pause
     Pause for some number of seconds between each retry
 
     >>> @rever(pause=5)
 
-    *Explanation: retry 1 time, pauses for 5 seconds between each retry,
-    catch any exception, raise MaxRetriesPerformed if all attempts fail*
+    *Explanation: retry 1 time, pause for 5 seconds between each retry,
+    catch any exception, raise MaxRetriesPerformed if all attempts fail,
+    do not call ny function prior to retrying*
 
 
 exception
@@ -77,15 +79,17 @@ exception
     >>> @rever(exception=TypeError)
     >>> @rever(exception=(TypeError, ))
 
-    *Explanation: retry 1 time, pauses for 0 seconds between each retry,
-    catch TypeError, raise MaxRetriesPerformed if all attempts fail*
+    *Explanation: retry 1 time, pause for 0 seconds between each retry,
+    catch TypeError, raise MaxRetriesPerformed if all attempts fail,
+    do not call any function prior to retrying*
 
     Catch one of multiple specific exceptions
 
     >>> @rever(exception=(TypeError, ConnectionError))
 
-    *Explanation: retry 1 time, pauses for 0 seconds between each retry,
-    catch TypeError or ConnectionError, raise MaxRetriesPerformed if all attempts fail*
+    *Explanation: retry 1 time, pause for 0 seconds between each retry,
+    catch TypeError or ConnectionError, raise MaxRetriesPerformed if all attempts fail,
+    do not call any function prior to retrying*
 
 raises
     Raise an exception or do not
@@ -93,30 +97,47 @@ raises
     >>> @rever(raises=False)
 
     *Explanation: retry 1 time, pauses for 0 seconds between each retry,
-    catch any exception, do not raise MaxRetriesPerformed if all attempts fail*
+    catch any exception, do not raise MaxRetriesPerformed if all attempts fail,
+    do not call any function prior to retrying*
+
+prior
+    Call a function prior to retrying
+
+    >>> @rever(prior=some_function_to_call_prior_to_retyring)
+
+    *Explanation: retry 1 time, pause for 0 seconds between each retry,
+    catch any exception, do not raise MaxRetriesPerformed if all attempts fail,
+    call a function prior to retrying*
 
 
 Installation
 ------------
 
-If you want to install it via pip, try this in the terminal:
+If you want to install it via pip, you can install from PyPI:
 
-    pip install rever
+    $ pip install rever
 
-Or this:
 
-    pip install git+git://github.com/limecrayon/rever
+Testing
+-------
+
+To run tests, clone the github repository:
+
+    $ git clone https://github.com/limecrayon/rever
+
+If you want to use tox, in the terminal type:
+
+    $ pip install tox
+    $ tox
+
+Or you could skip tox and use pytest:
+
+    $ pip install pytest
+    $ python -m pytest
 
 
 Next Steps
 ----------
 
-1)  Create a keyword argument to rever which will enable you to call a function prior to retrying.
-
-    >>> def reset_switch():
-    >>>     function_to_deactivate_switch()
-    >>>     function_to_reactivate_switch()
-
-    >>> @rever(prior=reset_switch)
-    >>> def enjoy_lightbulb(args, kwargs):
-    >>>     some_activity(args, kwargs)
+This has only been tested on Python 3.5.  It will probably work on other Python 3.x version as well.
+Next step is to test on other Python versions, possibly using Travis CI.

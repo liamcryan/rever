@@ -2,10 +2,16 @@
 History
 -------
 
+version 0.2.0 (6/26/2017)
+-------------------------
+
+- specify a function to call prior to retrying
+- realized that the retry count was off by 1, now it should be correct
+
 version 0.1.0 (6/24/2017)
 -------------------------
 
-- specify whether or not to raise exception after all retry attemtps
+- specify whether to raise exception after all retry attempts
 - included some testing
 - default pause is now zero seconds
 
