@@ -22,8 +22,12 @@ def rever(**rever_kwargs):
         def wrapper(*args, **kwargs):
             try:
                 if args or kwargs:
+                    # this should capture potential return values
+                    # return func(*args, **kwargs)
                     func(*args, **kwargs)
                 else:
+                    # this should capture potential return values
+                    # return func()
                     func()
 
             except rever_kwargs["exception"]:
