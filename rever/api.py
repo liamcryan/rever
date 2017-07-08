@@ -23,11 +23,11 @@ def rever(**rever_kwargs):
             try:
                 if args or kwargs:
                     # this should capture potential return values
-                    # return func(*args, **kwargs)
+                    # r = func(*args, **kwargs)
                     func(*args, **kwargs)
                 else:
                     # this should capture potential return values
-                    # return func()
+                    # r = return func()
                     func()
 
             except rever_kwargs["exception"]:
@@ -37,6 +37,8 @@ def rever(**rever_kwargs):
                 if rever_kwargs["times"] >= 0:
                     if rever_kwargs["prior"]:
                         rever_kwargs["prior"]()
+                    # this should capture potential return values
+                    # r = wrapper(*args, **kwargs)
                     return wrapper(*args, **kwargs)
 
                 elif rever_kwargs["raises"]:
@@ -44,6 +46,7 @@ def rever(**rever_kwargs):
 
                 else:
                     return None
-
+                # return the potential return value
+                # return r
         return wrapper
     return rever_decorator
