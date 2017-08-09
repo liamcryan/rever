@@ -22,9 +22,9 @@ def rever(**rever_kwargs):
         def wrapper(*args, **kwargs):
             try:
                 if args or kwargs:
-                    func(*args, **kwargs)
+                    r = func(*args, **kwargs)
                 else:
-                    func()
+                    r = func()
 
             except rever_kwargs["exception"]:
                 time.sleep(rever_kwargs["pause"])
@@ -33,13 +33,15 @@ def rever(**rever_kwargs):
                 if rever_kwargs["times"] >= 0:
                     if rever_kwargs["prior"]:
                         rever_kwargs["prior"]()
-                    return wrapper(*args, **kwargs)
+                    r = wrapper(*args, **kwargs)
 
                 elif rever_kwargs["raises"]:
                     raise ReachedMaxRetries(func)
 
                 else:
                     return None
+
+            return r
 
         return wrapper
     return rever_decorator

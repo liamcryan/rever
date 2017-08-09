@@ -125,6 +125,8 @@ To run tests, clone the github repository:
 
     $ git clone https://github.com/limecrayon/rever
 
+Change directory to \x\y\z\rever\
+
 If you want to use tox, in the terminal type:
 
     $ pip install tox
@@ -143,3 +145,7 @@ Next Steps
 
 This has only been tested on Python 3.5.  It will probably work on other Python 3.x version as well.
 Next step is to test on other Python versions, possibly using Travis CI.
+
+I saw another retry decorator on github which I really liked, it was called riprova.  Searching through
+this repository, I learned some reasons for choosing decorators which back off rather than retrying at set intervals.
+This looks like a good idea to me, so I think I will provide that option in the future.

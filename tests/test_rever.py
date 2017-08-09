@@ -61,3 +61,9 @@ class TestRever:
             def f():
                 raise OSError
             f()
+
+    def test_return_value(self):
+        @rever()
+        def f():
+            return "does this return anything?"
+        assert f() == "does this return anything?"

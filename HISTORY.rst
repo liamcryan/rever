@@ -2,6 +2,11 @@
 History
 -------
 
+version 0.2.1 (8/8/2017)
+------------------------
+
+- realized that any function wanting to return any value would return None, so fixed that :)
+
 version 0.2.0 (6/26/2017)
 -------------------------
 
