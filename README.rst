@@ -49,29 +49,57 @@ example it is taken care of in the decorator; a nice way of keeping things separ
 Keyword Arguments
 -----------------
 
-The rever decorator takes only keyword arguments.  By default, if no kwargs are supplied, then
-the decorator will retry the function 1 time, with a 0 second pause, catch any exception that occurs,
-raise a MaxRetriesPerformed error if all of the retrys fail, and will not call any function prior to retrying.
+The rever decorator takes only keyword arguments.
+
+Possible keyword arguments:
+
+*backoff*:
+
+    description:  if True subsequent pauses for each retry will increase exponentially
+    possible values:  boolean
+
+*total_pause*:
+
+    description:  the total time you are willing to wait for all of your pauses between retrys
+    possible values: integer or float
+
+*steps*:
+
+    description:  related to backoff and is set at 10 because wikipedia says so:  https://en.wikipedia.org/wiki/Exponential_backoff
+    possible values:  integer
+
+*exception*:
+
+    description:   you can choose which exception or exceptions to catch
+    possible values:  any Exception that gets raised by Python
+
+*raises*:
+
+    description:  if all the retrys fail, do you want to raise an exception or not?
+    possible values:  boolean
+
+*prior*:
+
+    description:  if you want to call another function/script prior to retrying, you can do so but without any args or kwargs
+    possible values:  a simple function...cannot take args or kwargs
+
+**These arguments are used if *backoff* is set to False**:
+
+*times*:
+
+    description:  the number of times you want the function to retry
+    possible values:  integer
+
+*pause*:
+
+    description:  the number of seconds you want to pause before your function retrys
+    possible values:  integer or float
 
 
-times
-    Retry a certain number of times
+Examples & Explanation
+----------------------
 
-    >>> @rever(times=10)
-
-    *Explanation: retry 10 times, pause for 0 seconds between each retry,
-    catch any exception, raise MaxRetriesPerformed if all attempts fail,
-    do not call any function prior to retrying*
-
-pause
-    Pause for some number of seconds between each retry
-
-    >>> @rever(pause=5)
-
-    *Explanation: retry 1 time, pause for 5 seconds between each retry,
-    catch any exception, raise MaxRetriesPerformed if all attempts fail,
-    do not call ny function prior to retrying*
-
+**This section needs to be updated**
 
 exception
     Catch one specific exception
@@ -110,6 +138,26 @@ prior
     call a function prior to retrying*
 
 
+**Below used only if backoff is set to False**
+
+times
+    Retry a certain number of times
+
+    >>> @rever(backoff=False, times=10)
+
+    *Explanation: retry 10 times, pause for 0 seconds between each retry,
+    catch any exception, raise MaxRetriesPerformed if all attempts fail,
+    do not call any function prior to retrying*
+
+pause
+    Pause for some number of seconds between each retry
+
+    >>> @rever(backoff=False, pause=5)
+
+    *Explanation: retry 1 time, pause for 5 seconds between each retry,
+    catch any exception, raise MaxRetriesPerformed if all attempts fail,
+    do not call ny function prior to retrying*
+
 Installation
 ------------
 
@@ -125,9 +173,10 @@ To run tests, clone the github repository:
 
     $ git clone https://github.com/limecrayon/rever
 
-Change directory to \x\y\z\rever\
 
 If you want to use tox, in the terminal type:
+
+    $ cd rever
 
     $ pip install tox
 
@@ -144,8 +193,8 @@ Next Steps
 ----------
 
 This has only been tested on Python 3.5.  It will probably work on other Python 3.x version as well.
-Next step is to test on other Python versions, possibly using Travis CI.
+If you are using version other than 3.5 you will need to include your version in the tox.ini file when running tox.
 
-I saw another retry decorator on github which I really liked, it was called riprova.  Searching through
-this repository, I learned some reasons for choosing decorators which back off rather than retrying at set intervals.
-This looks like a good idea to me, so I think I will provide that option in the future.
+I want to try out TravisCI at some point.
+
+Examples section needs to be updated.

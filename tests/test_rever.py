@@ -1,4 +1,5 @@
 import pytest
+import time
 
 from rever import rever
 from rever.errors import ReachedMaxRetries
@@ -7,6 +8,7 @@ from rever.errors import ReachedMaxRetries
 class TestRever:
     """
     Generally the types of exceptions being raised do not really matter for the tests
+    # because of the default max pause time of about 1 second, more or less takes a second per test
     """
     def test_no_kwargs_raise_max_retries(self):
         with pytest.raises(ReachedMaxRetries):
@@ -15,27 +17,20 @@ class TestRever:
                 raise OSError
             f()
 
-    def test_oserror_raise_max_retries(self):
-        with pytest.raises(ReachedMaxRetries):
-            @rever(exception=OSError)
-            def f():
-                raise OSError
-            f()
-
-    def test_typerror_raise_typeerror(self):
+    def test_try_to_catch_oserror_but_miss(self):
         with pytest.raises(TypeError):
             @rever(exception=OSError)
             def f():
                 raise TypeError
             f()
 
-    def test_oserror_raise_no_exception(self):
+    def test_catch_oserror_but_ultimately_raise_no_exception(self):
         @rever(exception=OSError, raises=False)
         def f():
             raise OSError
         assert f() is None
 
-    def test_function_args_kwargs_raise_max_retries(self):
+    def test_function_args_kwargs(self):
         with pytest.raises(ReachedMaxRetries):
             @rever()
             def f(*args, **kwargs):
@@ -43,16 +38,7 @@ class TestRever:
                     raise OSError
             f(1, 2, fruit="apple")
 
-    def test_function_args_kwargs_two_retrys_raise_max_retries(self):
-        with pytest.raises(ReachedMaxRetries):
-            @rever(times=2)
-            def f(*args, **kwargs):
-                if args or kwargs:
-                    raise OSError
-
-            f(1, 2, fruit="apple")
-
-    def test_oserror_call_prior_raise_max_retries(self):
+    def test_oserror_call_prior(self):
         with pytest.raises(ReachedMaxRetries):
             def g():
                 return None
@@ -62,8 +48,46 @@ class TestRever:
                 raise OSError
             f()
 
-    def test_return_value(self):
+    def test_return_value_no_errors(self):
         @rever()
         def f():
             return "does this return anything?"
         assert f() == "does this return anything?"
+
+    def test_backoff_total_pause(self):
+        @rever(total_pause=2, raises=False)
+        def f():
+            raise OSError
+
+        st = time.time()
+        f()
+        t = time.time() - st
+        assert 1 < t < 3
+
+    def test_backoff_steps(self):
+        @rever(steps=10, raises=False)
+        def f():
+            raise OSError
+
+        st = time.time()
+        f()
+        t = time.time() - st
+        assert 0 < t < 2  # cannot test steps directly but 10 steps corresponds to 1 second given default total pause
+
+    def test_no_backoff_pause(self):
+        @rever(backoff=False, pause=2, raises=False)
+        def f():
+            raise OSError
+
+        st = time.time()
+        f()
+        t = time.time() - st
+        assert 1 < t < 3
+
+    def test_function_args_kwargs_times(self):
+        with pytest.raises(ReachedMaxRetries):
+            @rever(backoff=False, times=2)
+            def f(*args, **kwargs):
+                if args or kwargs:
+                    raise OSError
+            f(1, 2, fruit="apple")

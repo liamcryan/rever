@@ -5,10 +5,41 @@ from rever.errors import ReachedMaxRetries
 
 
 def rever(**rever_kwargs):
+    """
+
+    rever_kwargs default values defined:
+
+    If backoff is True, then times and pause will not be initialized, but they will be calculated.
+    backoff: True
+    total_pause: 30
+    steps: 10
+    exception: BaseException
+    raises: True
+    prior: None
+
+    If backoff is False, then total_pause and steps will be initialized, but do not get used.
+    backoff: False
+    times: 1
+    pause: 0
+    exception: BaseException
+    raises: True
+    prior: None
+    """
+
+    if "backoff" not in rever_kwargs:
+        rever_kwargs["backoff"] = True
+    if "total_pause" not in rever_kwargs:
+        rever_kwargs["total_pause"] = 1
+    if "steps" not in rever_kwargs:
+        rever_kwargs["steps"] = 10
+
     if "times" not in rever_kwargs:
-        rever_kwargs["times"] = 1
+        if not rever_kwargs["backoff"]:
+            rever_kwargs["times"] = 1
     if "pause" not in rever_kwargs:
-        rever_kwargs["pause"] = 0
+        if not rever_kwargs["backoff"]:
+            rever_kwargs["pause"] = 0
+
     if "exception" not in rever_kwargs:
         rever_kwargs["exception"] = BaseException
     if "raises" not in rever_kwargs:
@@ -22,26 +53,38 @@ def rever(**rever_kwargs):
         def wrapper(*args, **kwargs):
             try:
                 if args or kwargs:
-                    r = func(*args, **kwargs)
+                    return func(*args, **kwargs)
                 else:
-                    r = func()
+                    return func()
 
             except rever_kwargs["exception"]:
-                time.sleep(rever_kwargs["pause"])
-                rever_kwargs["times"] -= 1
 
-                if rever_kwargs["times"] >= 0:
-                    if rever_kwargs["prior"]:
-                        rever_kwargs["prior"]()
-                    r = wrapper(*args, **kwargs)
+                if rever_kwargs["backoff"]:
+                    rever_kwargs["pause"] = \
+                        .5 * (rever_kwargs["total_pause"] / 2 ** (rever_kwargs["steps"]))
 
-                elif rever_kwargs["raises"]:
+                    if rever_kwargs["steps"] >= 0:
+                        time.sleep(rever_kwargs["pause"])
+                        rever_kwargs["steps"] -= 1
+
+                        if rever_kwargs["prior"]:
+                            rever_kwargs["prior"]()
+
+                        return wrapper(*args, **kwargs)
+                else:
+                    if rever_kwargs["times"] > 0:
+                        time.sleep(rever_kwargs["pause"])
+                        rever_kwargs["times"] -= 1
+
+                        if rever_kwargs["prior"]:
+                            rever_kwargs["prior"]()
+
+                        return wrapper(*args, **kwargs)
+
+                if rever_kwargs["raises"] and (rever_kwargs["steps"] < 0 or rever_kwargs["times"] <= 0):
                     raise ReachedMaxRetries(func)
-
                 else:
                     return None
-
-            return r
 
         return wrapper
     return rever_decorator

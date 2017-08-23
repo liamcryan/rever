@@ -2,6 +2,12 @@
 History
 -------
 
+version 0.3.0 (8/23/2017)
+-------------------------
+
+- wanted to modify behaviour to exponential backoff as default rather than fixed intervals between retrys
+- to replicate functionality of previous versions include a kwarg backoff=False in your decorator
+
 version 0.2.1 (8/8/2017)
 ------------------------
 
