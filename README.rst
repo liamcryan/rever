@@ -2,10 +2,6 @@
 Rever, A retrying decorator
 ---------------------------
 
-
-Why use it?
------------
-
 A retry decorator can be useful in many situations.  One example is when scraping web pages.
 Suppose you have a function that retrieves the status code response of a GET request.  If the status
 code returns 200, then you are happy.  But if not, then there here is what you might do:
@@ -56,31 +52,37 @@ Possible keyword arguments:
 *backoff*:
 
     description:  if True subsequent pauses for each retry will increase exponentially
+
     possible values:  boolean
 
 *total_pause*:
 
     description:  the total time you are willing to wait for all of your pauses between retrys
+
     possible values: integer or float
 
 *steps*:
 
     description:  related to backoff and is set at 10 because wikipedia says so:  https://en.wikipedia.org/wiki/Exponential_backoff
+
     possible values:  integer
 
 *exception*:
 
     description:   you can choose which exception or exceptions to catch
+
     possible values:  any Exception that gets raised by Python
 
 *raises*:
 
     description:  if all the retrys fail, do you want to raise an exception or not?
+
     possible values:  boolean
 
 *prior*:
 
     description:  if you want to call another function/script prior to retrying, you can do so but without any args or kwargs
+
     possible values:  a simple function...cannot take args or kwargs
 
 **These arguments are used if *backoff* is set to False**:
@@ -88,90 +90,108 @@ Possible keyword arguments:
 *times*:
 
     description:  the number of times you want the function to retry
+
     possible values:  integer
 
 *pause*:
 
     description:  the number of seconds you want to pause before your function retrys
+
     possible values:  integer or float
 
 
 Examples & Explanation
 ----------------------
 
-**This section needs to be updated**
+**default**
+    Default behavior
 
-exception
+    >>> @rever()
+
+    - rever will use exponential backoff
+    - rever will have a total pause time of 30 seconds (total time your function will pause)
+    - rever will have 10 steps (steps here means the number of times your function will retry)
+    - rever will catch any exception
+    - rever will ultimately raise an exception if all retrys fail
+
+**exception**
     Catch one specific exception
 
     >>> @rever(exception=TypeError)
     >>> @rever(exception=(TypeError, ))
 
-    *Explanation: retry 1 time, pause for 0 seconds between each retry,
-    catch TypeError, raise MaxRetriesPerformed if all attempts fail,
-    do not call any function prior to retrying*
+    - rever will use exponential backoff
+    - rever will have a total pause time of 30 seconds (total time your function will pause)
+    - rever will have 10 steps (steps here means the number of times your function will retry)
+    - rever will catch only *TypeError*
+    - rever will ultimately raise an exception if all retrys fail
 
     Catch one of multiple specific exceptions
 
     >>> @rever(exception=(TypeError, ConnectionError))
 
-    *Explanation: retry 1 time, pause for 0 seconds between each retry,
-    catch TypeError or ConnectionError, raise MaxRetriesPerformed if all attempts fail,
-    do not call any function prior to retrying*
+    - rever will use exponential backoff
+    - rever will have a total pause time of 30 seconds (total time your function will pause)
+    - rever will have 10 steps (steps here means the number of times your function will retry)
+    - rever will catch any of only *TypeError* or *ConnectionError*
+    - rever will ultimately raise an exception if all retrys fail
 
 raises
     Raise an exception or do not
 
     >>> @rever(raises=False)
 
-    *Explanation: retry 1 time, pauses for 0 seconds between each retry,
-    catch any exception, do not raise MaxRetriesPerformed if all attempts fail,
-    do not call any function prior to retrying*
+    - rever will use exponential backoff
+    - rever will have a total pause time of 30 seconds (total time your function will pause)
+    - rever will have 10 steps (steps here means the number of times your function will retry)
+    - rever will catch any exception
+    - rever will ultimately *not* raise an exception if all retrys fail
 
 prior
     Call a function prior to retrying
 
     >>> @rever(prior=some_function_to_call_prior_to_retyring)
 
-    *Explanation: retry 1 time, pause for 0 seconds between each retry,
-    catch any exception, do not raise MaxRetriesPerformed if all attempts fail,
-    call a function prior to retrying*
+    - rever will use exponential backoff
+    - rever will have a total pause time of 30 seconds (total time your function will pause)
+    - rever will have 10 steps (steps here means the number of times your function will retry)
+    - rever will catch any exception
+    - rever will ultimately raise an exception if all retrys fail
+    - *rever will call some function prior to each retry*
 
-
-**Below used only if backoff is set to False**
+**Below used only if backoff is set to False, it is included for backwards compatibility**
 
 times
     Retry a certain number of times
 
     >>> @rever(backoff=False, times=10)
 
-    *Explanation: retry 10 times, pause for 0 seconds between each retry,
-    catch any exception, raise MaxRetriesPerformed if all attempts fail,
-    do not call any function prior to retrying*
+    - rever will *not* use exponential backoff
+    - rever will have a total pause time of *0* seconds (total time your function will pause)
+    - rever will retry *1* time (time here means the number of times your function will retry)
+    - rever will catch any exception
+    - rever will ultimately raise an exception if all retrys fail
 
 pause
     Pause for some number of seconds between each retry
 
     >>> @rever(backoff=False, pause=5)
 
-    *Explanation: retry 1 time, pause for 5 seconds between each retry,
-    catch any exception, raise MaxRetriesPerformed if all attempts fail,
-    do not call ny function prior to retrying*
+    - rever will *not* use exponential backoff
+    - rever will have a total pause time of *5* seconds (total time your function will pause)
+    - rever will retry *1* time (time here means the number of times your function will retry)
+    - rever will catch any exception
+    - rever will ultimately raise an exception if all retrys fail
 
-Installation
-------------
 
-If you want to install it via pip, you can install from PyPI:
-
-    $ pip install rever
-
+You can basically use any combination of keywords you would like
 
 Testing
 -------
 
 To run tests, clone the github repository:
 
-    $ git clone https://github.com/limecrayon/rever
+    $ git clone https://github.com/liamcryan/rever
 
 
 If you want to use tox, in the terminal type:
