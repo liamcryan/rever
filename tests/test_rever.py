@@ -10,11 +10,13 @@ class TestRever:
     Generally the types of exceptions being raised do not really matter for the tests
     # because of the default max pause time of about 1 second, more or less takes a second per test
     """
+
     def test_no_kwargs_raise_max_retries(self):
         with pytest.raises(ReachedMaxRetries):
             @rever()
             def f():
                 raise OSError
+
             f()
 
     def test_try_to_catch_oserror_but_miss(self):
@@ -22,12 +24,14 @@ class TestRever:
             @rever(exception=OSError)
             def f():
                 raise TypeError
+
             f()
 
     def test_catch_oserror_but_ultimately_raise_no_exception(self):
         @rever(exception=OSError, raises=False)
         def f():
             raise OSError
+
         assert f() is None
 
     def test_function_args_kwargs(self):
@@ -36,6 +40,7 @@ class TestRever:
             def f(*args, **kwargs):
                 if args or kwargs:
                     raise OSError
+
             f(1, 2, fruit="apple")
 
     def test_oserror_call_prior(self):
@@ -46,12 +51,14 @@ class TestRever:
             @rever(prior=g)
             def f():
                 raise OSError
+
             f()
 
     def test_return_value_no_errors(self):
         @rever()
         def f():
             return "does this return anything?"
+
         assert f() == "does this return anything?"
 
     def test_backoff_total_pause(self):
@@ -90,4 +97,21 @@ class TestRever:
             def f(*args, **kwargs):
                 if args or kwargs:
                     raise OSError
+
             f(1, 2, fruit="apple")
+
+    def test_multiple_uses_of_same_function_no_reached_max_tries_exception_raised(self):
+        a = 1
+
+        @rever(backoff=False, times=1, raises=True)
+        def f():
+            nonlocal a
+            if a == 1:
+                a -= 1
+                raise OSError
+        f()  # will catch OSError when times = 1
+        f()
+        f()
+        # prior to v 0.3.0 calling f() repeatedly like this would trigger a ReachedMaxRetries exception
+        # as the 'times' decreased to 0.  The rever_kwargs were not re-initialized with each new function call
+        # and so the 'times' kept decreasing

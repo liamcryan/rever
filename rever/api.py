@@ -25,37 +25,52 @@ def rever(**rever_kwargs):
     raises: True
     prior: None
     """
+    backoff = True
+    total_pause = 1
+    steps = 10
+    times = 1
+    pause = 0
+    exception = BaseException
+    raises = True
+    prior = None
 
     if "backoff" not in rever_kwargs:
-        rever_kwargs["backoff"] = True
+        rever_kwargs["backoff"] = backoff
     if "total_pause" not in rever_kwargs:
-        rever_kwargs["total_pause"] = 1
+        rever_kwargs["total_pause"] = total_pause
     if "steps" not in rever_kwargs:
-        rever_kwargs["steps"] = 10
+        rever_kwargs["steps"] = steps
 
     if "times" not in rever_kwargs:
         if not rever_kwargs["backoff"]:
-            rever_kwargs["times"] = 1
+            rever_kwargs["times"] = times
     if "pause" not in rever_kwargs:
         if not rever_kwargs["backoff"]:
-            rever_kwargs["pause"] = 0
+            rever_kwargs["pause"] = pause
 
     if "exception" not in rever_kwargs:
-        rever_kwargs["exception"] = BaseException
+        rever_kwargs["exception"] = exception
     if "raises" not in rever_kwargs:
-        rever_kwargs["raises"] = True
+        rever_kwargs["raises"] = raises
     if "prior" not in rever_kwargs:
-        rever_kwargs["prior"] = None
+        rever_kwargs["prior"] = prior
+
+    initialized_kwargs = {key: rever_kwargs[key] for key in rever_kwargs}
 
     def rever_decorator(func):
 
         @wraps(func)
         def wrapper(*args, **kwargs):
             try:
+                nonlocal rever_kwargs
                 if args or kwargs:
-                    return func(*args, **kwargs)
+                    r = func(*args, **kwargs)
+                    rever_kwargs = {key: initialized_kwargs[key] for key in initialized_kwargs}
+                    return r
                 else:
-                    return func()
+                    r = func()
+                    rever_kwargs = {key: initialized_kwargs[key] for key in initialized_kwargs}
+                    return r
 
             except rever_kwargs["exception"]:
 
@@ -87,4 +102,5 @@ def rever(**rever_kwargs):
                     return None
 
         return wrapper
+
     return rever_decorator

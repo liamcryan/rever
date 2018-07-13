@@ -6,3 +6,4 @@ rever.egg-info
 dist
 rever/__pycache__
 tests/__pycache__
+.pytest_cache/
