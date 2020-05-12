@@ -12,8 +12,7 @@ version 0.3.2 (5/12/2020)
 version 0.3.1 (7/13/2018)
 -------------------------
 
-- found bug when calling the same decorated function multiple times.  In certain cases the 'times' keyword
-argument decreased to 0 triggering a ReachedMaxRetries exception despite the function only being called once
+- found bug when calling the same decorated function multiple times.  In certain cases the 'times' keyword argument decreased to 0 triggering a ReachedMaxRetries exception despite the function only being called once
 
 version 0.3.0 (8/23/2017)
 -------------------------
