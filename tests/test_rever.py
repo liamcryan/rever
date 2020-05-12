@@ -1,8 +1,7 @@
 import pytest
 import time
 
-from rever import rever
-from rever.errors import ReachedMaxRetries
+from rever import rever, ReachedMaxRetries
 
 
 class TestRever:
@@ -109,6 +108,7 @@ class TestRever:
             if a == 1:
                 a -= 1
                 raise OSError
+
         f()  # will catch OSError when times = 1
         f()
         f()

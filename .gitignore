@@ -1,9 +1,4 @@
 .idea
-.cache
-.coverage
-.tox
-rever.egg-info
-dist
-rever/__pycache__
-tests/__pycache__
+*.pyc
 .pytest_cache/
+venv/

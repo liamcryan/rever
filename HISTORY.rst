@@ -2,6 +2,15 @@
 History
 -------
 
+version 0.3.2 (5/12/2020)
+-------------------------
+
+- fix non-local rever_kwargs
+
+- change structure from multiple to files to one __init__ file
+
+- update README.rst with installation instructions
+
 version 0.3.1 (7/13/2018)
 -------------------------
 

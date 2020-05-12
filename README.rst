@@ -25,6 +25,7 @@ code returns 200, then you are happy.  But if not, then there here is what you m
 
 2)  You could use a retrying decorator like rever
 
+    >>> from rever import rever
     >>> @rever(times=2, pause=3, exception=MyException, raises=False)
     >>> def get_response(webpage):
     >>>     response = function_to_get_webpage(webpage)
@@ -40,6 +41,14 @@ code returns 200, then you are happy.  But if not, then there here is what you m
 
 In the first example, you need to write out the retrying logic yourself.  The second
 example it is taken care of in the decorator; a nice way of keeping things separate.
+
+Installation
+------------
+
+::
+
+    $ pip install rever
+
 
 
 Keyword Arguments
@@ -192,29 +201,6 @@ Testing
 To run tests, clone the github repository:
 
     $ git clone https://github.com/liamcryan/rever
-
-
-If you want to use tox, in the terminal type:
-
     $ cd rever
-
-    $ pip install tox
-
-    $ tox
-
-Or you could skip tox and use pytest:
-
     $ pip install pytest
-
-    $ python -m pytest
-
-
-Next Steps
-----------
-
-This has only been tested on Python 3.5.  It will probably work on other Python 3.x version as well.
-If you are using version other than 3.5 you will need to include your version in the tox.ini file when running tox.
-
-I want to try out TravisCI at some point.
-
-Examples section needs to be updated.
+    $ pytest
